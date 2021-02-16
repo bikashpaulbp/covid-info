@@ -1,33 +1,59 @@
 
+
+
 document.getElementById("get-name").addEventListener("keypress", function (event) {
 
     if (event.key === 'Enter') {
-      document.getElementById("search-btn").click();
+        document.getElementById("search-btn").click();
     }
-  });
+});
 
-// get country name from user
 
-document.getElementById("search-btn").addEventListener("click", function(){
+
+document.getElementById("search-btn").addEventListener("click", function () {
     const getName = document.getElementById("get-name").value || "Bangladesh";
     const url = `https://covid-api.mmediagroup.fr/v1/cases?country=${getName}`;
 
-    
-
-    console.log(url)
 
     fetch(url)
-    .then(res => res.json())
-    .then(data => display(data.All))
+        .then(res => res.json())
+        .then(data => display(data.All))
 
 
-function display(data) {
-    console.log(data)
-    console.log(data.country)
-    
-    
-        
-}
+    function display(data) {
+
+            const parentDiv = document.getElementById("covid-info-div");
+            parentDiv.innerHTML = "";
+            const childDiv = document.createElement("div");
+            parentDiv.appendChild(childDiv);
+            
+            childDiv.innerHTML = `
+                <h1>Name : ${data.country}</h1>
+                <br>
+                <p></p>
+                <p> Confirmed : ${data.confirmed}</p>
+                <br>
+                <p> Recovered : ${data.recovered}</p>
+                <br>
+                <p> Deaths : ${data.deaths}</p>
+                <br>
+                <p> Population : ${data.population}</p>
+                <br>
+                <p> Last updated : ${data.updated}</p>
+                <br>
+                <br>
+                <button id= "back-btn" type="button" class="btn btn-primary">Back</button>
+                 `
+            document.getElementById("covid-info").classList.remove('d-none')
+            document.getElementById("country-display").classList.add('d-none'); 
+
+            document.getElementById("back-btn").addEventListener("click", function(){
+                location.reload();
+            })
+
+
+
+    }
 })
 
 
@@ -35,12 +61,12 @@ fetch('https://restcountries.eu/rest/v2/all')
     .then(res => res.json())
     .then(all => display(all))
 
-    
+
 
 function display(all) {
-    
-    
-    
+
+
+
 
     let names = all.map(country => country.name);
     let capitals = all.map(country => country.capital);
@@ -62,7 +88,7 @@ function display(all) {
         displayDiv.style.boxShadow = "5px 5px 10px green";
         displayDiv.style.cursor = "pointer";
 
-        
+
 
         const flagImage = document.createElement("img");
         flagImage.setAttribute('src', flag);
@@ -82,30 +108,54 @@ function display(all) {
         displayDiv.appendChild(h4Tag);
 
 
-        displayDiv.addEventListener("click", function (){
-            
+        displayDiv.addEventListener("click", function () {
+
             const url = `https://covid-api.mmediagroup.fr/v1/cases?country=${name}`
             fetch(url)
-            .then(res => res.json())
-            .then(data => showInfo(data.All))
-            
+                .then(res => res.json())
+                .then(data => showInfo(data.All))
+
+
+
         });
 
-        function showInfo(data){
 
-            
-            
 
-            const infoDiv = document.getElementById("info-div")
-            
-            infoDiv.innerHTML = `
-            <h1>${data.country}</h1>
-            `
-            
-            
-            
-            
-            
+        function showInfo(data) {
+
+            console.log(data)
+
+            const parentDiv = document.getElementById("covid-info-div");
+            parentDiv.innerHTML = "";
+            const childDiv = document.createElement("div");
+            parentDiv.appendChild(childDiv);
+            childDiv.innerHTML = `
+                <h1>Name : ${name}</h1>
+                <br>
+                <p></p>
+                <p> Confirmed : ${data.confirmed}</p>
+                <br>
+                <p> Recovered : ${data.recovered}</p>
+                <br>
+                <p> Deaths : ${data.deaths}</p>
+                <br>
+                <p> Population : ${data.population}</p>
+                <br>
+                <p> Last updated : ${data.updated}</p>
+                <br>
+                <br>
+                <button id= "back-btn" type="button" class="btn btn-primary">Back</button>
+                 `
+            document.getElementById("covid-info").classList.remove('d-none')
+            document.getElementById("country-display").classList.add('d-none'); 
+
+            document.getElementById("back-btn").addEventListener("click", function(){
+                location.reload();
+            })
+
+
+
+
 
         }
     }
